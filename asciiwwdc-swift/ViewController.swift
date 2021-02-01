@@ -26,11 +26,17 @@ class ViewController: UIViewController {
         
         var conf:UICollectionLayoutListConfiguration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
         
-        conf.backgroundColor = .systemPurple
+        conf.backgroundColor = .systemBackground
         
         let layout:UICollectionViewCompositionalLayout = UICollectionViewCompositionalLayout.list(using: conf)
+        
+        self.navigationItem.title = "ASCIIWWDC-Swift"
     
-        collectionView = UICollectionView.init(frame: view.bounds, collectionViewLayout: layout)
+        var collectionViewFrame = view.bounds
+        if let keyWindow = UIApplication.shared.windows.first?.safeAreaInsets {
+            collectionViewFrame = CGRect(x: 0, y: keyWindow.top, width: view.bounds.width, height: view.bounds.height-keyWindow.top-keyWindow.bottom)
+        }
+        collectionView = UICollectionView.init(frame: collectionViewFrame, collectionViewLayout: layout)
 
         view.addSubview(collectionView)
 
