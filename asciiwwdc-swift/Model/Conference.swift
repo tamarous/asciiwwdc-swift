@@ -7,29 +7,26 @@
 
 import Foundation
 import Ji
+import IGListKit
 
-struct Conference:HtmlModelArrayProtocol,BaseHtmlModelProtocol,Hashable{
+class Conference:NSObject,HtmlModelArrayProtocol,BaseHtmlModelProtocol {
     static func == (lhs: Conference, rhs: Conference) -> Bool {
         return lhs.identifier == rhs.identifier
     }
     
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.identifier)
-    }
-    
     var name:String?
     var imageUrl:String?
-    var description:String?
+    var desc:String?
     var location:Location?
     var identifier:String?
     var time:String?
     var tracks:[Track]?
     
-    init(rootNode: JiNode) {
+    required init(rootNode: JiNode) {
         self.identifier = rootNode["id"]
         self.name = rootNode.xPath("./header/hgroup/h1").first?.content
         self.imageUrl = rootNode.xPath("./header/img").first?["src"]
-        self.description = rootNode.xPath("./header/hgroup/h2").first?.content
+        self.desc = rootNode.xPath("./header/hgroup/h2").first?.content
         self.time = rootNode.xPath("./header/time").first?["content"]
         
         if let locationNode:JiNode = rootNode.xPath("./header/address").first {
@@ -52,5 +49,15 @@ struct Conference:HtmlModelArrayProtocol,BaseHtmlModelProtocol,Hashable{
             resultArray.append(conference)
         }
         return resultArray
+    }
+}
+
+extension Conference: ListDiffable {
+    func diffIdentifier() -> NSObjectProtocol {
+        return self
+    }
+    
+    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
+        return isEqual(object)
     }
 }

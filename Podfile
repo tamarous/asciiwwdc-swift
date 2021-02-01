@@ -9,4 +9,5 @@ target 'asciiwwdc-swift' do
     pod 'Kingfisher'
     pod 'YYText'
     pod 'Shimmer'
+    pod 'IGListKit', '~> 4.0.0'
 end

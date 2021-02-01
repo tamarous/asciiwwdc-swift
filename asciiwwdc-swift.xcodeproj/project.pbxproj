@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		5238BAF993EEFE676146DD1B /* Pods_asciiwwdc_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 671050DF07E3D2561772C41A /* Pods_asciiwwdc_swift.framework */; };
+		BB6D5B2125C858ED00C25754 /* ConferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6D5B2025C858ED00C25754 /* ConferencesViewController.swift */; };
+		BB6D5B2425C85E5C00C25754 /* ConferencesListSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6D5B2325C85E5C00C25754 /* ConferencesListSectionController.swift */; };
 		BBBCB54F25C6D977009513A7 /* ConferencesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBCB54E25C6D977009513A7 /* ConferencesViewModel.swift */; };
 		BBF0AD8B25C68F4800030BA5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF0AD8A25C68F4800030BA5 /* AppDelegate.swift */; };
 		BBF0AD8D25C68F4800030BA5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF0AD8C25C68F4800030BA5 /* SceneDelegate.swift */; };
@@ -27,6 +29,8 @@
 		0978360B74F21062518CD30F /* Pods-asciiwwdc-swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-asciiwwdc-swift.release.xcconfig"; path = "Target Support Files/Pods-asciiwwdc-swift/Pods-asciiwwdc-swift.release.xcconfig"; sourceTree = "<group>"; };
 		0C34963C2FFAEB47EC830A67 /* Pods-asciiwwdc-swift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-asciiwwdc-swift.debug.xcconfig"; path = "Target Support Files/Pods-asciiwwdc-swift/Pods-asciiwwdc-swift.debug.xcconfig"; sourceTree = "<group>"; };
 		671050DF07E3D2561772C41A /* Pods_asciiwwdc_swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_asciiwwdc_swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB6D5B2025C858ED00C25754 /* ConferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferencesViewController.swift; sourceTree = "<group>"; };
+		BB6D5B2325C85E5C00C25754 /* ConferencesListSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferencesListSectionController.swift; sourceTree = "<group>"; };
 		BBBCB54E25C6D977009513A7 /* ConferencesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferencesViewModel.swift; sourceTree = "<group>"; };
 		BBF0AD8725C68F4800030BA5 /* asciiwwdc-swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "asciiwwdc-swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF0AD8A25C68F4800030BA5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -73,6 +77,15 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		BB6D5B1A25C8584000C25754 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				BB6D5B2025C858ED00C25754 /* ConferencesViewController.swift */,
+				BB6D5B2325C85E5C00C25754 /* ConferencesListSectionController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		BBF0AD7E25C68F4800030BA5 = {
 			isa = PBXGroup;
 			children = (
@@ -94,6 +107,7 @@
 		BBF0AD8925C68F4800030BA5 /* asciiwwdc-swift */ = {
 			isa = PBXGroup;
 			children = (
+				BB6D5B1A25C8584000C25754 /* ViewController */,
 				BBF0ADAB25C6987400030BA5 /* Model */,
 				BBF0AD8A25C68F4800030BA5 /* AppDelegate.swift */,
 				BBF0AD8C25C68F4800030BA5 /* SceneDelegate.swift */,
@@ -241,6 +255,8 @@
 				BBF0ADB725C69C8F00030BA5 /* Track.swift in Sources */,
 				BBF0AD8B25C68F4800030BA5 /* AppDelegate.swift in Sources */,
 				BBF0AD8D25C68F4800030BA5 /* SceneDelegate.swift in Sources */,
+				BB6D5B2425C85E5C00C25754 /* ConferencesListSectionController.swift in Sources */,
+				BB6D5B2125C858ED00C25754 /* ConferencesViewController.swift in Sources */,
 				BBF0ADAD25C698B200030BA5 /* BaseModel.swift in Sources */,
 				BBF0ADB425C69A0700030BA5 /* Location.swift in Sources */,
 				BBF0ADBB25C69CDA00030BA5 /* Session.swift in Sources */,
