@@ -31,6 +31,15 @@ class ConferencesListSectionController: ListSectionController {
         return cell
     }
     
+    
+    override func didSelectItem(at index: Int) {
+        if let conference = cellViewModel?.conference {
+            let tracksVC = TracksViewController()
+            tracksVC.conference = conference
+            viewController?.navigationController?.pushViewController(tracksVC, animated: true)
+        }
+    }
+    
     override func didUpdate(to object:Any) {
         cellViewModel = object as? ConferenceListCellViewModel
     }

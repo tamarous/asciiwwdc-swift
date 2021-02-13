@@ -27,7 +27,7 @@ class Conference:NSObject,HtmlModelArrayProtocol,BaseHtmlModelProtocol {
         self.name = rootNode.xPath("./header/hgroup/h1").first?.content
         self.imageUrl = "https://www.asciiwwdc.com" + (rootNode.xPath("./header/img").first?["src"])!
         self.desc = rootNode.xPath("./header/hgroup/h2").first?.content
-        self.time = rootNode.xPath("./header/time").first?["content"]
+        self.time = rootNode.xPath("./header/time").first?["content"]?.replacingOccurrences(of: "T", with: ":")
         
         if let locationNode:JiNode = rootNode.xPath("./header/address").first {
             self.location = Location(rootNode: locationNode)
@@ -54,10 +54,16 @@ class Conference:NSObject,HtmlModelArrayProtocol,BaseHtmlModelProtocol {
 
 extension Conference: ListDiffable {
     func diffIdentifier() -> NSObjectProtocol {
-        return self
+        return self.identifier! as NSObjectProtocol
     }
     
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        return isEqual(object)
+        guard self !== object else {
+            return true
+        }
+        guard let object = object as? Conference else {
+            return false
+        }
+        return self.identifier == object.identifier
     }
 }

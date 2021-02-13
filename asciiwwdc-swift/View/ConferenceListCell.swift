@@ -45,7 +45,7 @@ class ConferenceListCell: UICollectionViewCell {
         return label
     }()
     
-    var textContainerView: UIStackView = {
+    var containerView: UIStackView = {
         let view = UIStackView()
         return view
     }()
@@ -65,37 +65,27 @@ class ConferenceListCell: UICollectionViewCell {
     }
     
     func setupSubviews() {
-        contentView.addSubview(nameLabel)
-        contentView.addSubview(descLabel)
-        contentView.addSubview(locationLabel)
-        contentView.addSubview(timeLabel)
+        contentView.addSubview(containerView)
+        
+        containerView.addArrangedSubview(nameLabel)
+        containerView.addArrangedSubview(descLabel)
+        containerView.addArrangedSubview(locationLabel)
+        containerView.addArrangedSubview(timeLabel)
+        containerView.alignment = .leading
+        containerView.axis = .vertical
+        containerView.distribution = .equalSpacing
+        
+        containerView.backgroundColor = .white
         
         contentView.snp.makeConstraints { (make) in
             make.left.top.bottom.right.equalTo(self)
         }
         
-        nameLabel.snp.makeConstraints { (make) in
+        containerView.snp.makeConstraints { (make) in
             make.left.equalTo(contentView).offset(12)
-            make.top.equalTo(contentView).offset(12)
+            make.top.equalTo(contentView).offset(8)
+            make.bottom.equalTo(contentView).offset(-8)
             make.right.equalTo(contentView).offset(-12)
-        }
-        
-        descLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(nameLabel.snp.bottom).offset(8)
-            make.left.equalTo(nameLabel)
-            make.right.equalTo(nameLabel)
-        }
-        
-        locationLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(descLabel.snp.bottom).offset(8)
-            make.left.equalTo(nameLabel)
-            make.right.equalTo(nameLabel)
-        }
-        
-        timeLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(locationLabel.snp.bottom).offset(8)
-            make.left.equalTo(nameLabel)
-            make.right.equalTo(nameLabel)
         }
     }
 }

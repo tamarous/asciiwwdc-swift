@@ -7,13 +7,14 @@
 
 import Foundation
 import Ji
+import IGListKit
 
-struct Track: BaseHtmlModelProtocol {
+class Track: NSObject, BaseHtmlModelProtocol {
     var name:String?
     var identifier:String?
     var sessions:[Session]?
     
-    init(rootNode: JiNode) {
+    required init(rootNode: JiNode) {
         self.identifier = rootNode["id"]
         self.name = rootNode.xPath("./h1").first?.content
         
@@ -32,5 +33,21 @@ struct Track: BaseHtmlModelProtocol {
             sessions.append(Session(dtNode: dtNode, ddNode: ddNode))
         }
         self.sessions = sessions
+    }
+}
+
+extension Track: ListDiffable {
+    func diffIdentifier() -> NSObjectProtocol {
+        return self
+    }
+    
+    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
+        guard self !== object else {
+            return true
+        }
+        guard let track = object as? Track else {
+            return false
+        }
+        return self.identifier == track.identifier
     }
 }

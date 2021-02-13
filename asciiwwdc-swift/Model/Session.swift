@@ -7,8 +7,9 @@
 
 import Foundation
 import Ji
+import IGListKit
 
-struct Session {
+class Session:NSObject {
     var identifier:String?
     var index:Int?
     var hrefLink:String?
@@ -21,5 +22,21 @@ struct Session {
         }
         self.hrefLink = ddNode.xPath("./a").first?["href"]
         self.name = ddNode.xPath("./a").first?.content
+    }
+}
+
+extension Session: ListDiffable {
+    func diffIdentifier() -> NSObjectProtocol {
+        return self.identifier! as NSObjectProtocol
+    }
+    
+    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
+        guard self !== object else {
+            return true
+        }
+        guard let session = object as? Session else {
+            return false
+        }
+        return self.identifier == session.identifier
     }
 }
