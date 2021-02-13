@@ -9,30 +9,29 @@ import UIKit
 import IGListKit
 
 class ConferencesListSectionController: ListSectionController {
-    var conference:Conference!
+    var cellViewModel:ConferenceListCellViewModel?
     
     override init() {
         super.init()
-        inset = UIEdgeInsets(top:0, left:0, bottom:15, right:0)
-        
     }
     
-}
-
-extension ConferencesListSectionController {
     override func numberOfItems() -> Int {
         return 1
     }
     
     override func sizeForItem(at index:Int) -> CGSize {
-        return .zero
+        return CGSize.init(width: collectionContext?.containerSize.width ?? 0.0, height: 100)
     }
     
     override func cellForItem(at index:Int) -> UICollectionViewCell {
-        return UICollectionViewCell()
+        let cell = collectionContext!.dequeueReusableCell(of: ConferenceListCell.self, for: self, at: index)
+        if let cell = cell as? ConferenceListCell, let cellViewModel = cellViewModel {
+            cell.updateWithData(cellViewModel: cellViewModel)
+        }
+        return cell
     }
     
     override func didUpdate(to object:Any) {
-        conference = object as? Conference
+        cellViewModel = object as? ConferenceListCellViewModel
     }
 }

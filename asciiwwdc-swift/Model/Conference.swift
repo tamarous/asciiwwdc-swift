@@ -25,7 +25,7 @@ class Conference:NSObject,HtmlModelArrayProtocol,BaseHtmlModelProtocol {
     required init(rootNode: JiNode) {
         self.identifier = rootNode["id"]
         self.name = rootNode.xPath("./header/hgroup/h1").first?.content
-        self.imageUrl = rootNode.xPath("./header/img").first?["src"]
+        self.imageUrl = "https://www.asciiwwdc.com" + (rootNode.xPath("./header/img").first?["src"])!
         self.desc = rootNode.xPath("./header/hgroup/h2").first?.content
         self.time = rootNode.xPath("./header/time").first?["content"]
         

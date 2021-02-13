@@ -8,17 +8,20 @@
 import Foundation
 
 class ConferencesViewModel:NSObject {
-    var conferences:[Conference] = []
-    
+    var cellViewModels:[ConferenceListCellViewModel] = []
     var loading:Bool = false
     
-    func startLoading(completion:(([Conference]) -> Void)?) -> Void {
+    func loadRequest(completion:(() -> Void)?) -> Void {
         loading = true
         NetworkManager.sharedInstance.getAllConference { [weak self] (conferences) in
-            self?.conferences = conferences
+            self?.cellViewModels = conferences.map { (conference) in
+                let viewModel = ConferenceListCellViewModel()
+                viewModel.conference = conference
+                return viewModel
+            }
             self?.loading = false
             if let completion = completion {
-                completion(conferences)
+                completion()
             }
         }
     }
