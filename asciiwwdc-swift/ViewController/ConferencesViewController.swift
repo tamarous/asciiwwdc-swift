@@ -27,7 +27,7 @@ class ConferencesViewController: UIViewController {
         super.viewDidLoad()
         
         navigationItem.title = "Conferences"
-        navigationItem.largeTitleDisplayMode = .automatic
+        
         view.backgroundColor = UIColor.white
         view.addSubview(collectionView)
         
@@ -43,6 +43,12 @@ class ConferencesViewController: UIViewController {
         }
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        let layout = collectionView.collectionViewLayout
+        layout.invalidateLayout()
+    }
 }
 
 extension ConferencesViewController: ListAdapterDataSource {

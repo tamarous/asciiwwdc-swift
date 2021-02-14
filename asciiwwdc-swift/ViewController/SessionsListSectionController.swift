@@ -7,6 +7,7 @@
 
 import Foundation
 import IGListKit
+import UIKit
 
 class SessionsListSectionController: ListSectionController {
     var session: Session?
@@ -34,5 +35,13 @@ class SessionsListSectionController: ListSectionController {
     
     override func didUpdate(to object: Any) {
         session = object as? Session
+    }
+    
+    override func didSelectItem(at index: Int) {
+        if let session = self.session {
+            let webViewVC = WebViewController()
+            webViewVC.session = session
+            viewController?.navigationController?.pushViewController(webViewVC, animated: true)
+        }
     }
 }

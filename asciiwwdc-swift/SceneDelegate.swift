@@ -18,12 +18,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         
         let conferencesViewController = ConferencesViewController()
-        conferencesViewController.view.frame = UIScreen.main.bounds
         let navi:UINavigationController = UINavigationController.init(rootViewController:conferencesViewController)
         
         self.window = UIWindow(frame: scene.coordinateSpace.bounds)
         self.window?.windowScene = scene
-        self.window?.frame = UIScreen.main.bounds
         self.window?.rootViewController = navi
         self.window?.makeKeyAndVisible()
     }

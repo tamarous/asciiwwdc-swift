@@ -35,6 +35,13 @@ class SessionsViewController: UIViewController {
             make.left.bottom.right.top.equalTo(self.view)
         }
     }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        let layout = collectionView.collectionViewLayout
+        layout.invalidateLayout()
+    }
 }
 
 extension SessionsViewController: ListAdapterDelegate {

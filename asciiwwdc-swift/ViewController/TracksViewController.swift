@@ -38,6 +38,12 @@ class TracksViewController: UIViewController {
             make.left.right.top.bottom.equalTo(self.view)
         }
     }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        let layout = collectionView.collectionViewLayout
+        layout.invalidateLayout()
+    }
 }
 
 extension TracksViewController: ListAdapterDelegate {
