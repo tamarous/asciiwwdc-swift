@@ -8,6 +8,7 @@
 import Foundation
 import Ji
 import IGListKit
+import SQLite
 
 class Track: NSObject, BaseHtmlModelProtocol {
     var name:String?
@@ -30,7 +31,8 @@ class Track: NSObject, BaseHtmlModelProtocol {
         for i in 0..<count {
             let dtNode = dtNodes[i]
             let ddNode = ddNodes[i]
-            sessions.append(Session(dtNode: dtNode, ddNode: ddNode))
+            let session = Session(dtNode: dtNode, ddNode: ddNode)
+            sessions.append(session)
         }
         self.sessions = sessions
     }
@@ -49,5 +51,59 @@ extension Track: ListDiffable {
             return false
         }
         return self.identifier == track.identifier
+    }
+}
+
+extension Track: BasePersistencyProtocol {
+    static func createDataBase() -> Connection? {
+        let documentPath:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+        let dbPathURL = URL.init(string: documentPath)?.appendingPathComponent("track.sqlite")
+        if let dbUrlStr = dbPathURL?.absoluteString {
+            do {
+                let db = try Connection(dbUrlStr)
+                return db
+            } catch {
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    static func createTable() -> Table? {
+        let tracks = Table("tracks")
+        if let db = Conference.createDataBase() {
+            do {
+                try db.run(tracks.create(ifNotExists: true) { t in
+                    let name = Expression<String?>("name")
+                    let identifier = Expression<String>("identifier")
+                    
+                    t.column(identifier, primaryKey: true)
+                    t.column(name)
+                })
+                return tracks
+            } catch {
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    func insertRecord() {
+        let tracks = Track.createTable()
+        let name = Expression<String?>("name")
+        let identifier = Expression<String>("identifier")
+        do {
+            if let db = Track.createDataBase(), let tracks = tracks {
+                try db.run(tracks.insert(or: .replace,
+                                              name <- self.name,
+                                              identifier <- self.identifier!
+                ))
+            }
+        } catch {
+            
+        }
+    }
+    
+    func deleteRecord() {
     }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import Ji
+import SQLite
 
 protocol HtmlModelArrayProtocol {
     static func createModelArray(jiNodes:[JiNode]) -> [Any]
@@ -18,4 +19,16 @@ protocol HtmlModelProtocol {
 
 protocol BaseHtmlModelProtocol {
     init(rootNode:JiNode)
+}
+
+protocol BasePersistencyProtocol {
+    @discardableResult static func createDataBase() -> Connection?
+    
+    @discardableResult static func createTable() -> Table?
+    
+    func insertRecord()
+    
+    func deleteRecord()
+    
+    
 }

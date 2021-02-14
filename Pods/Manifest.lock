@@ -7,6 +7,9 @@ PODS:
   - Kingfisher (6.0.0)
   - Shimmer (1.0.2)
   - SnapKit (5.0.1)
+  - SQLite.swift (0.12.2):
+    - SQLite.swift/standard (= 0.12.2)
+  - SQLite.swift/standard (0.12.2)
   - YYText (1.0.7)
 
 DEPENDENCIES:
@@ -16,6 +19,7 @@ DEPENDENCIES:
   - Kingfisher
   - Shimmer
   - SnapKit
+  - SQLite.swift (~> 0.12.0)
   - YYText
 
 SPEC REPOS:
@@ -27,6 +31,7 @@ SPEC REPOS:
     - Kingfisher
     - Shimmer
     - SnapKit
+    - SQLite.swift
     - YYText
 
 SPEC CHECKSUMS:
@@ -37,8 +42,9 @@ SPEC CHECKSUMS:
   Kingfisher: 13f6e68c928eb50439b5cb2ea75d6035018438ea
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  SQLite.swift: d2b4642190917051ce6bd1d49aab565fe794eea3
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
 
-PODFILE CHECKSUM: 1e35d217a359cb3fd31840125a95cafcbd5ff746
+PODFILE CHECKSUM: a713456b5494702187545c8d97b450981e532c68
 
 COCOAPODS: 1.10.1

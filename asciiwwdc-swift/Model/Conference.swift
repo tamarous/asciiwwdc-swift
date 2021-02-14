@@ -8,6 +8,7 @@
 import Foundation
 import Ji
 import IGListKit
+import SQLite
 
 class Conference:NSObject,HtmlModelArrayProtocol,BaseHtmlModelProtocol {
     static func == (lhs: Conference, rhs: Conference) -> Bool {
@@ -46,6 +47,7 @@ class Conference:NSObject,HtmlModelArrayProtocol,BaseHtmlModelProtocol {
         var resultArray:[Conference] = []
         for aNode in jiNodes {
             let conference = Conference(rootNode: aNode)
+            conference.insertRecord()
             resultArray.append(conference)
         }
         return resultArray
@@ -65,5 +67,73 @@ extension Conference: ListDiffable {
             return false
         }
         return self.identifier == object.identifier
+    }
+}
+
+extension Conference: BasePersistencyProtocol {
+    static func createDataBase() -> Connection? {
+        let documentPath:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+        let dbPathURL = URL.init(string: documentPath)?.appendingPathComponent("conference.sqlite")
+        if let dbUrlStr = dbPathURL?.absoluteString {
+            do {
+                let db = try Connection(dbUrlStr)
+                return db
+            } catch {
+                print("error: \(error)")
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    static func createTable() -> Table? {
+        let conferences = Table("conferences")
+        if let db = Conference.createDataBase() {
+            do {
+                try db.run(conferences.create(ifNotExists: true) { t in
+                    let name = Expression<String?>("name")
+                    let imageUrl = Expression<String?>("imageUrl")
+                    let desc = Expression<String?>("desc")
+                    let identifier = Expression<String>("identifier")
+                    let time = Expression<String?>("time")
+                    
+                    t.column(identifier, primaryKey: true)
+                    t.column(name)
+                    t.column(imageUrl)
+                    t.column(desc)
+                    t.column(time)
+                })
+                return conferences
+            } catch {
+                print("error: \(error)")
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    func insertRecord() {
+        let conferences = Conference.createTable()
+        let name = Expression<String?>("name")
+        let imageUrl = Expression<String?>("imageUrl")
+        let desc = Expression<String?>("desc")
+        let identifier = Expression<String>("identifier")
+        let time = Expression<String?>("time")
+        do {
+            if let db = Conference.createDataBase(), let conferences = conferences {
+                try db.run(conferences.insert(or: .replace,
+                                              name <- self.name,
+                                              imageUrl <- self.imageUrl,
+                                              desc <- self.desc,
+                                              identifier <- self.identifier!,
+                                              time <- self.time
+                ))
+            }
+        } catch {
+            print("error: \(error)")
+        }
+    }
+    
+    func deleteRecord() {
     }
 }

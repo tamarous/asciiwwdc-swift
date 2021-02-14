@@ -10,4 +10,5 @@ target 'asciiwwdc-swift' do
     pod 'YYText'
     pod 'Shimmer'
     pod 'IGListKit', '~> 4.0.0'
+    pod 'SQLite.swift', '~> 0.12.0'
 end

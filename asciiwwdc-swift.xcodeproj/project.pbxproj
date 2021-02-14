@@ -93,6 +93,14 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		1596C3EB25D970410068D56E /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				BBF0ADA825C6934100030BA5 /* NetworkManager.swift */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
 		15A175C025CC47D6005AE473 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +155,7 @@
 		BBF0AD8925C68F4800030BA5 /* asciiwwdc-swift */ = {
 			isa = PBXGroup;
 			children = (
+				1596C3EB25D970410068D56E /* Vendor */,
 				158DCEB425CE818E007D2664 /* ViewModel */,
 				15A175C025CC47D6005AE473 /* View */,
 				BB6D5B1A25C8584000C25754 /* ViewController */,
@@ -157,7 +166,6 @@
 				BBF0AD9325C68F4B00030BA5 /* Assets.xcassets */,
 				BBF0AD9525C68F4B00030BA5 /* LaunchScreen.storyboard */,
 				BBF0AD9825C68F4B00030BA5 /* Info.plist */,
-				BBF0ADA825C6934100030BA5 /* NetworkManager.swift */,
 			);
 			path = "asciiwwdc-swift";
 			sourceTree = "<group>";
