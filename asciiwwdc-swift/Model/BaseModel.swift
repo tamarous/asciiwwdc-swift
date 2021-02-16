@@ -22,13 +22,13 @@ protocol BaseHtmlModelProtocol {
 }
 
 protocol BasePersistencyProtocol {
-    @discardableResult static func createDataBase() -> Connection?
+    @discardableResult func createDataBase() -> Connection?
     
-    @discardableResult static func createTable() -> Table?
+    @discardableResult func createTable() -> Table?
     
     func insertRecord()
     
     func deleteRecord()
     
-    
+    func updateRecord()
 }

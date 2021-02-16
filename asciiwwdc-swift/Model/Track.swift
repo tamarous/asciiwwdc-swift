@@ -14,6 +14,9 @@ class Track: NSObject, BaseHtmlModelProtocol {
     var name:String?
     var identifier:String?
     var sessions:[Session]?
+    var parentIdentifier:String?
+    
+    var connection:Connection?
     
     required init(rootNode: JiNode) {
         self.identifier = rootNode["id"]
@@ -23,7 +26,6 @@ class Track: NSObject, BaseHtmlModelProtocol {
         let ddNodes = rootNode.xPath("./dl/dd")
         
         guard dtNodes.count == ddNodes.count else {
-            print("mismatched nodes count")
             return
         }
         let count = dtNodes.count
@@ -32,6 +34,8 @@ class Track: NSObject, BaseHtmlModelProtocol {
             let dtNode = dtNodes[i]
             let ddNode = ddNodes[i]
             let session = Session(dtNode: dtNode, ddNode: ddNode)
+            session.parentIdentifier = self.identifier
+            session.insertRecord()
             sessions.append(session)
         }
         self.sessions = sessions
@@ -55,33 +59,41 @@ extension Track: ListDiffable {
 }
 
 extension Track: BasePersistencyProtocol {
-    static func createDataBase() -> Connection? {
+    func createDataBase() -> Connection? {
+        if let connection = self.connection {
+            return connection
+        }
+        
         let documentPath:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         let dbPathURL = URL.init(string: documentPath)?.appendingPathComponent("track.sqlite")
         if let dbUrlStr = dbPathURL?.absoluteString {
             do {
-                let db = try Connection(dbUrlStr)
-                return db
+                self.connection = try Connection(dbUrlStr)
+                return self.connection
             } catch {
+                print("\(#fileID) \(#line) error: \(error)")
                 return nil
             }
         }
         return nil
     }
     
-    static func createTable() -> Table? {
+    func createTable() -> Table? {
         let tracks = Table("tracks")
-        if let db = Conference.createDataBase() {
+        if let db = self.createDataBase() {
             do {
                 try db.run(tracks.create(ifNotExists: true) { t in
                     let name = Expression<String?>("name")
                     let identifier = Expression<String>("identifier")
+                    let parentId = Expression<String?>("parentIdentifier")
                     
                     t.column(identifier, primaryKey: true)
                     t.column(name)
+                    t.column(parentId)
                 })
                 return tracks
             } catch {
+                print("\(#fileID) \(#line) error: \(error)")
                 return nil
             }
         }
@@ -89,21 +101,42 @@ extension Track: BasePersistencyProtocol {
     }
     
     func insertRecord() {
-        let tracks = Track.createTable()
-        let name = Expression<String?>("name")
-        let identifier = Expression<String>("identifier")
-        do {
-            if let db = Track.createDataBase(), let tracks = tracks {
-                try db.run(tracks.insert(or: .replace,
-                                              name <- self.name,
-                                              identifier <- self.identifier!
-                ))
+        DispatchQueue.global().async {
+            let tracks = self.createTable()
+            let name = Expression<String?>("name")
+            let identifier = Expression<String>("identifier")
+            let parentId = Expression<String?>("parentIdentifier")
+            do {
+                if let db = self.createDataBase(), let tracks = tracks {
+                    try db.run(tracks.insert(or: .replace,
+                                                  name <- self.name,
+                                                  identifier <- self.identifier!,
+                                                  parentId <- self.parentIdentifier
+                    ))
+                }
+            } catch {
+                print("\(#fileID) \(#line) error: \(error)")
             }
-        } catch {
-            
         }
     }
     
     func deleteRecord() {
+        
+    }
+    
+    func updateRecord() {
+        DispatchQueue.global().async {
+            do {
+                if let tracks = self.createTable(), let db = self.createDataBase() {
+                    let name = Expression<String?>("name")
+                    let identifier = Expression<String>("identifier")
+                    let parentId = Expression<String?>("parentIdentifier")
+                    let thisRecord = tracks.filter(identifier == self.identifier!)
+                    try db.run(thisRecord.update(name <- self.name, parentId <- self.parentIdentifier))
+                }
+            } catch {
+                print("\(#fileID) \(#line) error: \(error)")
+            }
+        }
     }
 }

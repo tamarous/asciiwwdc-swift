@@ -15,6 +15,9 @@ class Session:NSObject {
     var hrefLink:String?
     var name:String?
     var favorited:Bool = false
+    var parentIdentifier:String?
+    
+    var connection:Connection?
     
     init(dtNode:JiNode, ddNode:JiNode) {
         self.identifier = dtNode["id"]
@@ -40,35 +43,45 @@ extension Session: ListDiffable {
 }
 
 extension Session: BasePersistencyProtocol {
-    static func createDataBase() -> Connection? {
+    func createDataBase() -> Connection? {
+        if let connection = self.connection {
+            return connection
+        }
+        
         let documentPath:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         let dbPathURL = URL.init(string: documentPath)?.appendingPathComponent("session.sqlite")
         if let dbUrlStr = dbPathURL?.absoluteString {
             do {
-                let db = try Connection(dbUrlStr)
-                return db
+                self.connection = try Connection(dbUrlStr)
+                return self.connection
             } catch {
+                print("\(#fileID) \(#line) error: \(error)")
                 return nil
             }
         }
         return nil
     }
     
-    static func createTable() -> Table? {
+    func createTable() -> Table? {
         let sessions = Table("sessions")
-        if let db = Session.createDataBase() {
+        if let db = self.createDataBase() {
             do {
                 try db.run(sessions.create(ifNotExists: true) { t in
                     let name = Expression<String?>("name")
                     let identifier = Expression<String>("identifier")
                     let href = Expression<String?>("hrefLink")
+                    let parentId = Expression<String?>("parentIdentifier")
+                    let favorited = Expression<Bool>("favorited")
                     
                     t.column(identifier, primaryKey: true)
                     t.column(name)
                     t.column(href)
+                    t.column(parentId)
+                    t.column(favorited)
                 })
                 return sessions
             } catch {
+                print("\(#fileID) \(#line) error: \(error)")
                 return nil
             }
         }
@@ -76,24 +89,50 @@ extension Session: BasePersistencyProtocol {
     }
     
     func insertRecord() {
-        let sessions = Session.createTable()
-        let name = Expression<String?>("name")
-        let identifier = Expression<String>("identifier")
-        let href = Expression<String?>("hrefLink")
-        do {
-            if let db = Session.createDataBase(), let sessions = sessions {
-                try db.run(sessions.insert(or: .replace,
-                                              name <- self.name,
-                                              identifier <- self.identifier!,
-                                              href <- self.hrefLink
-                ))
+        DispatchQueue.global().async {
+            let sessions = self.createTable()
+            let name = Expression<String?>("name")
+            let identifier = Expression<String>("identifier")
+            let href = Expression<String?>("hrefLink")
+            let parentId = Expression<String?>("parentIdentifier")
+            let favorited = Expression<Bool>("favorited")
+            do {
+                if let db = self.createDataBase(), let sessions = sessions {
+                    try db.run(sessions.insert(or: .replace,
+                                                  name <- self.name,
+                                                  identifier <- self.identifier!,
+                                                  href <- self.hrefLink,
+                                                  parentId <- self.parentIdentifier,
+                                                  favorited <- self.favorited
+                    ))
+                }
+            } catch {
+                print("\(#fileID) \(#line) error: \(error)")
             }
-        } catch {
-            
         }
     }
     
     func deleteRecord() {
+        
+    }
+    
+    func updateRecord() {
+        DispatchQueue.global().async {
+            do {
+                if let sessions = self.createTable(), let db = self.createDataBase() {
+                    let name = Expression<String?>("name")
+                    let identifier = Expression<String>("identifier")
+                    let href = Expression<String?>("hrefLink")
+                    let parentId = Expression<String?>("parentIdentifier")
+                    let favorited = Expression<Bool>("favorited")
+                    
+                    let thisRecord = sessions.filter(identifier == self.identifier!)
+                    try db.run(thisRecord.update(name <- self.name, href <- self.hrefLink, parentId <- self.parentIdentifier, favorited <- self.favorited))
+                }
+            } catch {
+                print("\(#fileID) \(#line) error: \(error)")
+            }
+        }
     }
 }
 
