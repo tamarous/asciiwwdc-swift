@@ -14,7 +14,7 @@
 		153CF87B25D824940084991F /* SessionsListSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153CF87A25D824940084991F /* SessionsListSectionController.swift */; };
 		153CF87E25D8273B0084991F /* SessionListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153CF87D25D8273B0084991F /* SessionListCell.swift */; };
 		158DCEB825CE8236007D2664 /* ConferenceListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158DCEB725CE8236007D2664 /* ConferenceListCellViewModel.swift */; };
-		1596C3DE25D8D1890068D56E /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596C3DD25D8D1890068D56E /* WebViewController.swift */; };
+		1596C3DE25D8D1890068D56E /* SessionWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596C3DD25D8D1890068D56E /* SessionWebViewController.swift */; };
 		15A175C225CC47F0005AE473 /* ConferenceListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A175C125CC47F0005AE473 /* ConferenceListCell.swift */; };
 		515A1DDAB23E9D8E4F1CC426 /* Pods_asciiwwdc_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F32FB03349B53145A618A701 /* Pods_asciiwwdc_swift.framework */; };
 		BB6D5B2125C858ED00C25754 /* ConferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6D5B2025C858ED00C25754 /* ConferencesViewController.swift */; };
@@ -40,7 +40,7 @@
 		153CF87A25D824940084991F /* SessionsListSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionsListSectionController.swift; sourceTree = "<group>"; };
 		153CF87D25D8273B0084991F /* SessionListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListCell.swift; sourceTree = "<group>"; };
 		158DCEB725CE8236007D2664 /* ConferenceListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceListCellViewModel.swift; sourceTree = "<group>"; };
-		1596C3DD25D8D1890068D56E /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		1596C3DD25D8D1890068D56E /* SessionWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionWebViewController.swift; sourceTree = "<group>"; };
 		15A175C125CC47F0005AE473 /* ConferenceListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceListCell.swift; sourceTree = "<group>"; };
 		8CC39D3FD0F2F916C4463990 /* Pods-asciiwwdc-swift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-asciiwwdc-swift.debug.xcconfig"; path = "Target Support Files/Pods-asciiwwdc-swift/Pods-asciiwwdc-swift.debug.xcconfig"; sourceTree = "<group>"; };
 		93BC91409117B63729BB5F12 /* Pods-asciiwwdc-swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-asciiwwdc-swift.release.xcconfig"; path = "Target Support Files/Pods-asciiwwdc-swift/Pods-asciiwwdc-swift.release.xcconfig"; sourceTree = "<group>"; };
@@ -127,7 +127,7 @@
 				153CF86D25D80C360084991F /* TracksListSectionController.swift */,
 				153CF87725D823040084991F /* SessionsViewController.swift */,
 				153CF87A25D824940084991F /* SessionsListSectionController.swift */,
-				1596C3DD25D8D1890068D56E /* WebViewController.swift */,
+				1596C3DD25D8D1890068D56E /* SessionWebViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -295,7 +295,7 @@
 				BBBCB54F25C6D977009513A7 /* ConferencesViewModel.swift in Sources */,
 				BBF0ADA925C6934100030BA5 /* NetworkManager.swift in Sources */,
 				BBF0ADB125C6994A00030BA5 /* Conference.swift in Sources */,
-				1596C3DE25D8D1890068D56E /* WebViewController.swift in Sources */,
+				1596C3DE25D8D1890068D56E /* SessionWebViewController.swift in Sources */,
 				153CF87E25D8273B0084991F /* SessionListCell.swift in Sources */,
 				BBF0ADB725C69C8F00030BA5 /* Track.swift in Sources */,
 				BBF0AD8B25C68F4800030BA5 /* AppDelegate.swift in Sources */,

@@ -14,6 +14,7 @@ class Session:NSObject {
     var identifier:String?
     var hrefLink:String?
     var name:String?
+    var favorited:Bool = false
     
     init(dtNode:JiNode, ddNode:JiNode) {
         self.identifier = dtNode["id"]
