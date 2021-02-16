@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import WebKit
+import MBProgressHUD
 
 class SessionWebViewController: UIViewController {
     var session:Session?
@@ -56,12 +57,19 @@ class SessionWebViewController: UIViewController {
     @objc func favoritedTapped() {
         if let session = self.session {
             self.session?.favorited = !session.favorited
+            self.session?.updateRecord()
         }
         var imageName = "star"
+        var promptText = ""
         if let session = self.session {
             imageName = session.favorited ? "star.fill" : "star"
+            promptText = session.favorited ? "已收藏" : "已取消收藏"
         }
         favorited.image = UIImage.init(systemName: imageName)
+        let hud:MBProgressHUD = MBProgressHUD.showAdded(to: self.view, animated: true)
+        hud.mode = MBProgressHUDMode.text
+        hud.label.text = promptText
+        hud.hide(animated: true, afterDelay: 1)
     }
 }
 
