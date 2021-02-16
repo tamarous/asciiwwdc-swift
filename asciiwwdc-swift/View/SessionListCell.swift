@@ -30,7 +30,7 @@ class SessionListCell: UICollectionViewCell {
     
     func updateWithData(session:Session) {
         self.session = session
-        self.nameLabel.text = session.name
+        self.nameLabel.text = "\(session.index!) - \(session.name!)"
         self.nameLabel.sizeToFit()
     }
     

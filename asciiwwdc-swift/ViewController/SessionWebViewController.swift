@@ -75,7 +75,7 @@ class SessionWebViewController: UIViewController {
 
 extension SessionWebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        let removeHeader = "var collections=document.getElementsByTagName(\"header\");for(var i=0;i<collections.length;i++){var element=collections[i];element.style.display='none';}"
+        let removeHeader = "var collections=document.getElementsByTagName(\"header\");for(var i=0;i<collections.length-1;i++){var element=collections[i];element.style.display='none';}"
         let removeFooter = "var collections=document.getElementsByTagName(\"footer\");for(var i=0;i<collections.length;i++){var element=collections[i];element.style.display='none';}"
         let script = removeHeader + removeFooter
         self.webView.evaluateJavaScript(script) { [weak self] (result, error) in

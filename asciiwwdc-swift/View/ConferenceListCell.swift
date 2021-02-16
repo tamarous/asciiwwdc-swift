@@ -45,8 +45,14 @@ class ConferenceListCell: UICollectionViewCell {
         return label
     }()
     
-    var containerView: UIStackView = {
+    var stackView: UIStackView = {
         let view = UIStackView()
+        return view
+    }()
+    
+    var containerView:UIView = {
+        let view = UIView()
+        
         return view
     }()
     
@@ -54,38 +60,41 @@ class ConferenceListCell: UICollectionViewCell {
         self.viewModel = cellViewModel
         self.nameLabel.text = cellViewModel.conference?.name
         self.descLabel.text = cellViewModel.conference?.desc
-        self.locationLabel.text = cellViewModel.conference?.location?.name
         self.identifier = cellViewModel.conference?.identifier
-        self.timeLabel.text = cellViewModel.conference?.time
-
+        
         self.nameLabel.sizeToFit()
         self.descLabel.sizeToFit()
-        self.locationLabel.sizeToFit()
-        self.timeLabel.sizeToFit()
     }
     
     func setupSubviews() {
         contentView.addSubview(containerView)
         
-        containerView.addArrangedSubview(nameLabel)
-        containerView.addArrangedSubview(descLabel)
-        containerView.addArrangedSubview(locationLabel)
-        containerView.addArrangedSubview(timeLabel)
-        containerView.alignment = .leading
-        containerView.axis = .vertical
-        containerView.distribution = .equalSpacing
+        stackView.addArrangedSubview(nameLabel)
+        stackView.addArrangedSubview(descLabel)
+        stackView.alignment = .center
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
         
+        containerView.addSubview(stackView)
+        containerView.layer.cornerRadius = 4.0
         containerView.backgroundColor = .white
-        
+
         contentView.snp.makeConstraints { (make) in
             make.left.top.bottom.right.equalTo(self)
         }
         
         containerView.snp.makeConstraints { (make) in
-            make.left.equalTo(contentView).offset(12)
-            make.top.equalTo(contentView).offset(8)
-            make.bottom.equalTo(contentView).offset(-8)
-            make.right.equalTo(contentView).offset(-12)
+            make.top.equalTo(self.contentView).offset(8)
+            make.left.equalTo(self.contentView).offset(16)
+            make.bottom.equalTo(self.contentView).offset(-8)
+            make.right.equalTo(self.contentView).offset(-16)
+        }
+        
+        stackView.snp.makeConstraints { (make) in
+            make.left.equalTo(containerView).offset(8)
+            make.top.equalTo(containerView).offset(8)
+            make.bottom.equalTo(containerView).offset(-8)
+            make.right.equalTo(containerView).offset(-8)
         }
     }
 }

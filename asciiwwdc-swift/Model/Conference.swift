@@ -41,7 +41,6 @@ class Conference:NSObject,HtmlModelArrayProtocol,BaseHtmlModelProtocol {
         for trackNode in trackNodes {
             let track = Track(rootNode:trackNode)
             track.parentIdentifier = self.identifier
-            track.insertRecord()
             tracksArray.append(track)
         }
         self.tracks = tracksArray
@@ -51,7 +50,6 @@ class Conference:NSObject,HtmlModelArrayProtocol,BaseHtmlModelProtocol {
         var resultArray:[Conference] = []
         for aNode in jiNodes {
             let conference = Conference(rootNode: aNode)
-            conference.insertRecord()
             resultArray.append(conference)
         }
         return resultArray

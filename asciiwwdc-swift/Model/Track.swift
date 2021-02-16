@@ -35,7 +35,6 @@ class Track: NSObject, BaseHtmlModelProtocol {
             let ddNode = ddNodes[i]
             let session = Session(dtNode: dtNode, ddNode: ddNode)
             session.parentIdentifier = self.identifier
-            session.insertRecord()
             sessions.append(session)
         }
         self.sessions = sessions

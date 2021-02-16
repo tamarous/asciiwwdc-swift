@@ -16,6 +16,7 @@ class Session:NSObject {
     var name:String?
     var favorited:Bool = false
     var parentIdentifier:String?
+    var index:Int?
     
     var connection:Connection?
     
@@ -23,6 +24,9 @@ class Session:NSObject {
         self.identifier = dtNode["id"]
         self.hrefLink = ddNode.xPath("./a").first?["href"]
         self.name = ddNode.xPath("./a").first?.content
+        if let index = dtNode.content {
+            self.index = Int(index)
+        }
     }
 }
 
