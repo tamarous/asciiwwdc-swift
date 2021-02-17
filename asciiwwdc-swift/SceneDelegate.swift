@@ -18,11 +18,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         
         let conferencesViewController = ConferencesViewController()
-        let navi:UINavigationController = UINavigationController.init(rootViewController:conferencesViewController)
+        let conferenceNavi:UINavigationController = UINavigationController.init(rootViewController:conferencesViewController)
+        let conferencesItem = UITabBarItem()
+        conferencesItem.title = "All"
+        conferencesItem.image = UIImage.init(systemName: "list.bullet")
+        conferencesViewController.tabBarItem = conferencesItem
+        
+        let favoritesViewController = FavoriteSessionsViewController()
+        let favoritesNavi:UINavigationController = UINavigationController.init(rootViewController: favoritesViewController)
+        let favoritesItem = UITabBarItem()
+        favoritesItem.title = "Favorites"
+        favoritesItem.image = UIImage.init(systemName: "star.fill")
+        favoritesViewController.tabBarItem = favoritesItem
+        
+        let tabVC = BottomTabBarViewController()
+        tabVC.viewControllers = [conferenceNavi, favoritesNavi]
         
         self.window = UIWindow(frame: scene.coordinateSpace.bounds)
         self.window?.windowScene = scene
-        self.window?.rootViewController = navi
+        self.window?.rootViewController = tabVC
         self.window?.makeKeyAndVisible()
     }
 

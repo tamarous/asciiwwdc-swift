@@ -16,6 +16,8 @@
 		158DCEB825CE8236007D2664 /* ConferenceListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158DCEB725CE8236007D2664 /* ConferenceListCellViewModel.swift */; };
 		1596C3DE25D8D1890068D56E /* SessionWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596C3DD25D8D1890068D56E /* SessionWebViewController.swift */; };
 		15A175C225CC47F0005AE473 /* ConferenceListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A175C125CC47F0005AE473 /* ConferenceListCell.swift */; };
+		15F5BE2F25DD0F510020CA0B /* BottomTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F5BE2E25DD0F510020CA0B /* BottomTabBarViewController.swift */; };
+		15F5BE3225DD0FA40020CA0B /* FavoriteSessionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F5BE3125DD0FA40020CA0B /* FavoriteSessionsViewController.swift */; };
 		515A1DDAB23E9D8E4F1CC426 /* Pods_asciiwwdc_swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F32FB03349B53145A618A701 /* Pods_asciiwwdc_swift.framework */; };
 		BB6D5B2125C858ED00C25754 /* ConferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6D5B2025C858ED00C25754 /* ConferencesViewController.swift */; };
 		BB6D5B2425C85E5C00C25754 /* ConferencesListSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6D5B2325C85E5C00C25754 /* ConferencesListSectionController.swift */; };
@@ -41,6 +43,8 @@
 		158DCEB725CE8236007D2664 /* ConferenceListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceListCellViewModel.swift; sourceTree = "<group>"; };
 		1596C3DD25D8D1890068D56E /* SessionWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionWebViewController.swift; sourceTree = "<group>"; };
 		15A175C125CC47F0005AE473 /* ConferenceListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferenceListCell.swift; sourceTree = "<group>"; };
+		15F5BE2E25DD0F510020CA0B /* BottomTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomTabBarViewController.swift; sourceTree = "<group>"; };
+		15F5BE3125DD0FA40020CA0B /* FavoriteSessionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteSessionsViewController.swift; sourceTree = "<group>"; };
 		8CC39D3FD0F2F916C4463990 /* Pods-asciiwwdc-swift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-asciiwwdc-swift.debug.xcconfig"; path = "Target Support Files/Pods-asciiwwdc-swift/Pods-asciiwwdc-swift.debug.xcconfig"; sourceTree = "<group>"; };
 		93BC91409117B63729BB5F12 /* Pods-asciiwwdc-swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-asciiwwdc-swift.release.xcconfig"; path = "Target Support Files/Pods-asciiwwdc-swift/Pods-asciiwwdc-swift.release.xcconfig"; sourceTree = "<group>"; };
 		BB6D5B2025C858ED00C25754 /* ConferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConferencesViewController.swift; sourceTree = "<group>"; };
@@ -126,6 +130,8 @@
 				153CF87725D823040084991F /* SessionsViewController.swift */,
 				153CF87A25D824940084991F /* SessionsListSectionController.swift */,
 				1596C3DD25D8D1890068D56E /* SessionWebViewController.swift */,
+				15F5BE2E25DD0F510020CA0B /* BottomTabBarViewController.swift */,
+				15F5BE3125DD0FA40020CA0B /* FavoriteSessionsViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -289,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15F5BE3225DD0FA40020CA0B /* FavoriteSessionsViewController.swift in Sources */,
 				BBBCB54F25C6D977009513A7 /* ConferencesViewModel.swift in Sources */,
 				BBF0ADA925C6934100030BA5 /* NetworkManager.swift in Sources */,
 				BBF0ADB125C6994A00030BA5 /* Conference.swift in Sources */,
@@ -307,6 +314,7 @@
 				153CF87B25D824940084991F /* SessionsListSectionController.swift in Sources */,
 				BBF0ADBB25C69CDA00030BA5 /* Session.swift in Sources */,
 				153CF87125D80EDB0084991F /* TrackListCell.swift in Sources */,
+				15F5BE2F25DD0F510020CA0B /* BottomTabBarViewController.swift in Sources */,
 				15A175C225CC47F0005AE473 /* ConferenceListCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

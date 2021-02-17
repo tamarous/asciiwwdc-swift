@@ -21,8 +21,8 @@ protocol BaseHtmlModelProtocol {
     init(rootNode:JiNode)
 }
 
-protocol BasePersistencyProtocol:PersistableRecord {
-    func createDataBase() -> DatabaseQueue?
+protocol BasePersistencyProtocol:PersistableRecord, FetchableRecord {
+    static func createDataBase() -> DatabaseQueue?
     
     func insertRecord()
 

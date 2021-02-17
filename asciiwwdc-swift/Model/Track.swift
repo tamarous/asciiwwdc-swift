@@ -39,6 +39,13 @@ class Track: NSObject, BaseHtmlModelProtocol {
         }
         self.sessions = sessions
     }
+    
+    required init(row: Row) {
+        self.identifier = row["identifier"]
+        self.name = row["name"]
+        self.parentIdentifier = row["parentIdentifier"]
+        self.storeId = row["storeId"]
+    }
 }
 
 extension Track: ListDiffable {
@@ -58,7 +65,7 @@ extension Track: ListDiffable {
 }
 
 extension Track: BasePersistencyProtocol {
-    func createDataBase() -> DatabaseQueue? {
+    static func createDataBase() -> DatabaseQueue? {
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         if let datapath = NSURL.init(string: path)?.appendingPathComponent("track.sqlite3") {
             do {
@@ -73,7 +80,7 @@ extension Track: BasePersistencyProtocol {
     }
     
     func insertRecord() {
-        if let dbQueue = self.createDataBase() {
+        if let dbQueue = Track.createDataBase() {
             do {
                 try dbQueue.write({ db in
                     try db.create(table: "track", ifNotExists: true, body: { (t) in
@@ -92,7 +99,7 @@ extension Track: BasePersistencyProtocol {
     
     func updateRecord() {
         do {
-            if let dbQueue = self.createDataBase() {
+            if let dbQueue = Track.createDataBase() {
                 try dbQueue.write({ (db) in
                     try self.update(db)
                 })

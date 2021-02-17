@@ -18,6 +18,10 @@ struct Location: BaseHtmlModelProtocol {
     var postalCode:String?
     var addressCounty:String?
     
+    init() {
+        
+    }
+    
     init(rootNode: JiNode) {
         self.name = rootNode.children.filter({ (node) -> Bool in
             node["itemprop"] == "name"
@@ -76,6 +80,22 @@ class Conference:NSObject,HtmlModelArrayProtocol,BaseHtmlModelProtocol {
         self.tracks = tracksArray
     }
     
+    required init(row: Row) {
+        self.storeId = row["storeId"]
+        self.name = row["name"]
+        self.desc = row["desc"]
+        self.imageUrl = row["imageUrl"]
+        self.time = row["time"]
+        self.identifier = row["identifier"]
+        self.location = Location()
+        self.location?.name = row["location_name"]
+        self.location?.streetAddress = row["location_street"]
+        self.location?.addressRegion = row["location_region"]
+        self.location?.addressLocality = row["location_locality"]
+        self.location?.postalCode = row["location_postal"]
+        self.location?.addressCounty = row["location_county"]
+    }
+    
     static func createModelArray(jiNodes: [JiNode]) -> [Any] {
         var resultArray:[Conference] = []
         for aNode in jiNodes {
@@ -123,7 +143,7 @@ extension Conference: BasePersistencyProtocol {
         storeId = rowID
     }
     
-    func createDataBase() -> DatabaseQueue? {
+    static func createDataBase() -> DatabaseQueue? {
         do {
             let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
             if let datapath = NSURL.init(string: path)?.appendingPathComponent("conference.sqlite3") {
@@ -138,7 +158,7 @@ extension Conference: BasePersistencyProtocol {
     
     func insertRecord() {
         do {
-            if let dbQueue = self.createDataBase() {
+            if let dbQueue = Conference.createDataBase() {
                 try dbQueue.write({ (db) in
                     try db.create(table: "conference", ifNotExists: true, body: { (t) in
                         t.autoIncrementedPrimaryKey("storeId")
@@ -164,7 +184,7 @@ extension Conference: BasePersistencyProtocol {
     
     func updateRecord() {
         do {
-            if let dbQueue = self.createDataBase() {
+            if let dbQueue = Conference.createDataBase() {
                 try dbQueue.write({ (db) in
                     try self.update(db)
                 })

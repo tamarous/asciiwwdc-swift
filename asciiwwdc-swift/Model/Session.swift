@@ -27,6 +27,31 @@ class Session:NSObject {
             self.index = Int(index)
         }
     }
+    
+    required init(row: Row) {
+        self.identifier = row["identifier"]
+        self.hrefLink = row["href"]
+        self.name = row["name"]
+        self.favorited = row["favorited"]
+        self.parentIdentifier = row["parentIdentifier"]
+        self.index = row["index"]
+        self.storeId = row["storeId"]
+    }
+    
+    static func queryFavorites() -> [Session] {
+        var sessions:[Session] = []
+        do {
+            if let dbQueue = Session.createDataBase() {
+                try dbQueue.read({ (db) -> [Session] in
+                    sessions = try Session.fetchAll(db, sql: "SELECT * from session where favorited = 1")
+                    return sessions
+                })
+            }
+        } catch {
+            print("\(#fileID)-\(#line), error:\(error)")
+        }
+        return sessions
+    }
 }
 
 extension Session: ListDiffable {
@@ -60,7 +85,7 @@ extension Session: BasePersistencyProtocol {
         storeId = rowID
     }
     
-    func createDataBase() -> DatabaseQueue? {
+    static func createDataBase() -> DatabaseQueue? {
         do {
             let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
             if let datapath = NSURL.init(string: path)?.appendingPathComponent("session.sqlite3") {
@@ -75,14 +100,14 @@ extension Session: BasePersistencyProtocol {
     
     func insertRecord() {
         do {
-            if let dbQueue = self.createDataBase() {
+            if let dbQueue = Session.createDataBase() {
                 try dbQueue.write({ (db) in
                     try db.create(table: "session", ifNotExists: true, body: { (t) in
                         t.autoIncrementedPrimaryKey("storeId")
                         t.column("name", .text).notNull()
                         t.column("identifier", .text).notNull()
                         t.column("href", .text).notNull()
-                        t.column("favorited", .boolean).notNull()
+                        t.column("favorited", .boolean).notNull().defaults(to: false)
                         t.column("parentIdentifier", .text).notNull()
                         t.column("index", .integer).notNull()
                     })
@@ -96,9 +121,9 @@ extension Session: BasePersistencyProtocol {
     
     func updateRecord() {
         do {
-            if let dbQueue = self.createDataBase() {
+            if let dbQueue = Session.createDataBase() {
                 try dbQueue.write({ (db) in
-                    try self.update(db)
+                    try self.save(db)
                 })
             }
         } catch {
