@@ -32,6 +32,7 @@ class ConferenceListCell: UICollectionViewCell {
     var descLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
+        label.numberOfLines = 2
         label.textColor = .black
         return label
     }()
@@ -46,6 +47,7 @@ class ConferenceListCell: UICollectionViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = .black
+        label.textAlignment = .center
         return label
     }()
     
@@ -89,9 +91,9 @@ class ConferenceListCell: UICollectionViewCell {
         
         containerView.snp.makeConstraints { (make) in
             make.top.equalTo(self.contentView).offset(8)
-            make.left.equalTo(self.contentView).offset(32)
+            make.left.equalTo(self.contentView).offset(8)
             make.bottom.equalTo(self.contentView).offset(-8)
-            make.right.equalTo(self.contentView).offset(-32)
+            make.right.equalTo(self.contentView).offset(-8)
         }
         
         stackView.snp.makeConstraints { (make) in

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import IGListKit
 
 class ConferencesViewModel:NSObject {
     var cellViewModels:[ConferenceListCellViewModel] = []
@@ -24,5 +25,15 @@ class ConferencesViewModel:NSObject {
                 completion()
             }
         }
+    }
+}
+
+extension ConferencesViewModel: ListDiffable {
+    func diffIdentifier() -> NSObjectProtocol {
+        return self
+    }
+    
+    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
+        return true
     }
 }

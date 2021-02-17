@@ -11,24 +11,26 @@ import IGListKit
 class ConferencesListSectionController: ListSectionController {
     var cellViewModel:ConferenceListCellViewModel?
     
-    override init() {
-        super.init()
+    var viewModel:ConferencesViewModel?
+    
+    init(viewModel:ConferencesViewModel) {
+        self.viewModel = viewModel
     }
     
     override func numberOfItems() -> Int {
-        return 1
+        return self.viewModel?.cellViewModels.count ?? 0
     }
     
     override func sizeForItem(at index:Int) -> CGSize {
         if let width = collectionContext?.containerSize.width {
-            return CGSize.init(width: width, height: 120)
+            return CGSize.init(width: width / 2, height: 144)
         }
         return .zero
     }
     
     override func cellForItem(at index:Int) -> UICollectionViewCell {
         let cell = collectionContext!.dequeueReusableCell(of: ConferenceListCell.self, for: self, at: index)
-        if let cell = cell as? ConferenceListCell, let cellViewModel = cellViewModel {
+        if let cell = cell as? ConferenceListCell, let cellViewModel = self.viewModel?.cellViewModels[index] {
             cell.updateWithData(cellViewModel: cellViewModel)
         }
         return cell
@@ -36,7 +38,7 @@ class ConferencesListSectionController: ListSectionController {
     
     
     override func didSelectItem(at index: Int) {
-        if let conference = cellViewModel?.conference {
+        if let conference = self.viewModel?.cellViewModels[index].conference {
             let tracksVC = TracksViewController()
             tracksVC.conference = conference
             viewController?.navigationController?.pushViewController(tracksVC, animated: true)
@@ -44,6 +46,8 @@ class ConferencesListSectionController: ListSectionController {
     }
     
     override func didUpdate(to object:Any) {
-        cellViewModel = object as? ConferenceListCellViewModel
+        if let cellViewModel =  object as? ConferenceListCellViewModel {
+            self.cellViewModel = cellViewModel
+        }
     }
 }
