@@ -27,7 +27,6 @@
 		BBF0ADA925C6934100030BA5 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ADA825C6934100030BA5 /* NetworkManager.swift */; };
 		BBF0ADAD25C698B200030BA5 /* BaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ADAC25C698B200030BA5 /* BaseModel.swift */; };
 		BBF0ADB125C6994A00030BA5 /* Conference.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ADB025C6994A00030BA5 /* Conference.swift */; };
-		BBF0ADB425C69A0700030BA5 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ADB325C69A0700030BA5 /* Location.swift */; };
 		BBF0ADB725C69C8F00030BA5 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ADB625C69C8F00030BA5 /* Track.swift */; };
 		BBF0ADBB25C69CDA00030BA5 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF0ADBA25C69CDA00030BA5 /* Session.swift */; };
 /* End PBXBuildFile section */
@@ -56,7 +55,6 @@
 		BBF0ADA825C6934100030BA5 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		BBF0ADAC25C698B200030BA5 /* BaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseModel.swift; sourceTree = "<group>"; };
 		BBF0ADB025C6994A00030BA5 /* Conference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conference.swift; sourceTree = "<group>"; };
-		BBF0ADB325C69A0700030BA5 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		BBF0ADB625C69C8F00030BA5 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		BBF0ADBA25C69CDA00030BA5 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		F32FB03349B53145A618A701 /* Pods_asciiwwdc_swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_asciiwwdc_swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -172,7 +170,6 @@
 			children = (
 				BBF0ADAC25C698B200030BA5 /* BaseModel.swift */,
 				BBF0ADB025C6994A00030BA5 /* Conference.swift */,
-				BBF0ADB325C69A0700030BA5 /* Location.swift */,
 				BBF0ADB625C69C8F00030BA5 /* Track.swift */,
 				BBF0ADBA25C69CDA00030BA5 /* Session.swift */,
 			);
@@ -308,7 +305,6 @@
 				153CF86E25D80C360084991F /* TracksListSectionController.swift in Sources */,
 				158DCEB825CE8236007D2664 /* ConferenceListCellViewModel.swift in Sources */,
 				153CF87B25D824940084991F /* SessionsListSectionController.swift in Sources */,
-				BBF0ADB425C69A0700030BA5 /* Location.swift in Sources */,
 				BBF0ADBB25C69CDA00030BA5 /* Session.swift in Sources */,
 				153CF87125D80EDB0084991F /* TrackListCell.swift in Sources */,
 				15A175C225CC47F0005AE473 /* ConferenceListCell.swift in Sources */,

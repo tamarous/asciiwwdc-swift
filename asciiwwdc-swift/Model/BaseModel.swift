@@ -7,7 +7,7 @@
 
 import Foundation
 import Ji
-import SQLite
+import GRDB
 
 protocol HtmlModelArrayProtocol {
     static func createModelArray(jiNodes:[JiNode]) -> [Any]
@@ -21,14 +21,10 @@ protocol BaseHtmlModelProtocol {
     init(rootNode:JiNode)
 }
 
-protocol BasePersistencyProtocol {
-    @discardableResult func createDataBase() -> Connection?
-    
-    @discardableResult func createTable() -> Table?
+protocol BasePersistencyProtocol:PersistableRecord {
+    func createDataBase() -> DatabaseQueue?
     
     func insertRecord()
-    
-    func deleteRecord()
-    
+
     func updateRecord()
 }

@@ -8,7 +8,37 @@
 import Foundation
 import Ji
 import IGListKit
-import SQLite
+import GRDB
+
+struct Location: BaseHtmlModelProtocol {
+    var name:String?
+    var streetAddress:String?
+    var addressLocality:String?
+    var addressRegion:String?
+    var postalCode:String?
+    var addressCounty:String?
+    
+    init(rootNode: JiNode) {
+        self.name = rootNode.children.filter({ (node) -> Bool in
+            node["itemprop"] == "name"
+        }).first?.content
+        self.streetAddress = rootNode.children.filter({ (node) -> Bool in
+            node["itemprop"] == "streetAddress"
+        }).first?.content
+        self.addressLocality = rootNode.children.filter({ (node) -> Bool in
+            node["itemprop"] == "addressLocality"
+        }).first?.content
+        self.addressRegion = rootNode.children.filter({ (node) -> Bool in
+            node["itemprop"] == "addressRegion"
+        }).first?.content
+        self.postalCode = rootNode.children.filter({ (node) -> Bool in
+            node["itemprop"] == "postalCode"
+        }).first?.content
+        self.addressCounty = rootNode.children.filter({ (node) -> Bool in
+            node["itemprop"] == "addressCountry"
+        }).first?.content
+    }
+}
 
 class Conference:NSObject,HtmlModelArrayProtocol,BaseHtmlModelProtocol {
     static func == (lhs: Conference, rhs: Conference) -> Bool {
@@ -22,9 +52,8 @@ class Conference:NSObject,HtmlModelArrayProtocol,BaseHtmlModelProtocol {
     var identifier:String?
     var time:String?
     var tracks:[Track]?
-    
-    var connection:Connection?
-    
+    var storeId:Int64?
+
     required init(rootNode: JiNode) {
         self.identifier = rootNode["id"]
         self.name = rootNode.xPath("./header/hgroup/h1").first?.content
@@ -41,6 +70,7 @@ class Conference:NSObject,HtmlModelArrayProtocol,BaseHtmlModelProtocol {
         for trackNode in trackNodes {
             let track = Track(rootNode:trackNode)
             track.parentIdentifier = self.identifier
+            track.insertRecord()
             tracksArray.append(track)
         }
         self.tracks = tracksArray
@@ -50,6 +80,7 @@ class Conference:NSObject,HtmlModelArrayProtocol,BaseHtmlModelProtocol {
         var resultArray:[Conference] = []
         for aNode in jiNodes {
             let conference = Conference(rootNode: aNode)
+            conference.insertRecord()
             resultArray.append(conference)
         }
         return resultArray
@@ -73,93 +104,73 @@ extension Conference: ListDiffable {
 }
 
 extension Conference: BasePersistencyProtocol {
-    func createDataBase() -> Connection? {
-        if let connection = self.connection {
-            return connection
-        }
-        let documentPath:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-        let dbPathURL = URL.init(string: documentPath)?.appendingPathComponent("conference.sqlite")
-        if let dbUrlStr = dbPathURL?.absoluteString {
-            do {
-                self.connection = try Connection(dbUrlStr)
-                return self.connection
-            } catch {
-                print("\(#fileID) \(#line) error: \(error)")
-                return nil
-            }
-        }
-        return nil
+    func encode(to container: inout PersistenceContainer) {
+        container["storeId"] = storeId
+        container["name"] = name
+        container["imageUrl"] = imageUrl
+        container["desc"] = desc
+        container["time"] = time
+        container["identifier"] = identifier
+        container["location_name"] = location?.name
+        container["location_street"] = location?.streetAddress
+        container["location_region"] = location?.addressRegion
+        container["location_locality"] = location?.addressLocality
+        container["location_postal"] = location?.postalCode
+        container["location_county"] = location?.addressCounty
     }
     
-    func createTable() -> Table? {
-        let conferences = Table("conferences")
-        if let db = self.createDataBase() {
-            do {
-                try db.run(conferences.create(ifNotExists: true) { t in
-                    let name = Expression<String?>("name")
-                    let imageUrl = Expression<String?>("imageUrl")
-                    let desc = Expression<String?>("desc")
-                    let identifier = Expression<String>("identifier")
-                    let time = Expression<String?>("time")
-                    
-                    t.column(identifier, primaryKey: true)
-                    t.column(name)
-                    t.column(imageUrl)
-                    t.column(desc)
-                    t.column(time)
-                })
-                return conferences
-            } catch {
-                print("\(#fileID) \(#line) error: \(error)")
-                return nil
+    func didInsert(with rowID: Int64, for column: String?) {
+        storeId = rowID
+    }
+    
+    func createDataBase() -> DatabaseQueue? {
+        do {
+            let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+            if let datapath = NSURL.init(string: path)?.appendingPathComponent("conference.sqlite3") {
+                let dbQueue = try DatabaseQueue(path: datapath.absoluteString)
+                return dbQueue
             }
+        } catch {
+            print("\(#fileID)-\(#line), error:\(error)")
         }
         return nil
     }
     
     func insertRecord() {
-        DispatchQueue.global().async {
-            let conferences = self.createTable()
-            let name = Expression<String?>("name")
-            let imageUrl = Expression<String?>("imageUrl")
-            let desc = Expression<String?>("desc")
-            let identifier = Expression<String>("identifier")
-            let time = Expression<String?>("time")
-            do {
-                if let db = self.createDataBase(), let conferences = conferences {
-                    try db.run(conferences.insert(or: .replace,
-                                                  name <- self.name,
-                                                  imageUrl <- self.imageUrl,
-                                                  desc <- self.desc,
-                                                  identifier <- self.identifier!,
-                                                  time <- self.time
-                    ))
-                }
-            } catch {
-                print("\(#fileID) \(#line) error: \(error)")
+        do {
+            if let dbQueue = self.createDataBase() {
+                try dbQueue.write({ (db) in
+                    try db.create(table: "conference", ifNotExists: true, body: { (t) in
+                        t.autoIncrementedPrimaryKey("storeId")
+                        t.column("name", .text).notNull()
+                        t.column("imageUrl", .text).notNull()
+                        t.column("desc", .text).notNull()
+                        t.column("time", .text).notNull()
+                        t.column("identifier", .text).notNull()
+                        t.column("location_name", .text).notNull()
+                        t.column("location_street", .text).notNull()
+                        t.column("location_region", .text).notNull()
+                        t.column("location_locality", .text).notNull()
+                        t.column("location_postal", .text).notNull()
+                        t.column("location_county", .text).notNull()
+                    })
+                    try self.insert(db)
+                })
             }
+        } catch {
+            print("\(#fileID)-\(#line), error:\(error)")
         }
     }
     
-    func deleteRecord() {
-        
-    }
-    
     func updateRecord() {
-        DispatchQueue.global().async {
-            do {
-                if let db = self.createDataBase(), let conferences = self.createTable() {
-                    let name = Expression<String?>("name")
-                    let imageUrl = Expression<String?>("imageUrl")
-                    let desc = Expression<String?>("desc")
-                    let identifier = Expression<String>("identifier")
-                    let time = Expression<String?>("time")
-                    let thisRecord = conferences.filter(self.identifier! == identifier)
-                    try db.run(thisRecord.update(name <- self.name, imageUrl <- self.imageUrl, desc <- self.desc, time <- self.time))
-                }
-            } catch {
-                print("\(#fileID) \(#line) error: \(error)")
+        do {
+            if let dbQueue = self.createDataBase() {
+                try dbQueue.write({ (db) in
+                    try self.update(db)
+                })
             }
+        } catch {
+            print("\(#fileID)-\(#line), error:\(error)")
         }
     }
 }

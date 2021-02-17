@@ -8,7 +8,7 @@
 import Foundation
 import Ji
 import IGListKit
-import SQLite
+import GRDB
 
 class Session:NSObject {
     var identifier:String?
@@ -17,8 +17,7 @@ class Session:NSObject {
     var favorited:Bool = false
     var parentIdentifier:String?
     var index:Int?
-    
-    var connection:Connection?
+    var storeId:Int64?
     
     init(dtNode:JiNode, ddNode:JiNode) {
         self.identifier = dtNode["id"]
@@ -47,95 +46,63 @@ extension Session: ListDiffable {
 }
 
 extension Session: BasePersistencyProtocol {
-    func createDataBase() -> Connection? {
-        if let connection = self.connection {
-            return connection
-        }
-        
-        let documentPath:String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-        let dbPathURL = URL.init(string: documentPath)?.appendingPathComponent("session.sqlite")
-        if let dbUrlStr = dbPathURL?.absoluteString {
-            do {
-                self.connection = try Connection(dbUrlStr)
-                return self.connection
-            } catch {
-                print("\(#fileID) \(#line) error: \(error)")
-                return nil
-            }
-        }
-        return nil
+    func encode(to container: inout PersistenceContainer) {
+        container["identifier"] = identifier
+        container["href"] = hrefLink
+        container["name"] = name
+        container["favorited"] = favorited
+        container["parentIdentifier"] = parentIdentifier
+        container["index"] = index
+        container["storeId"] = storeId
     }
     
-    func createTable() -> Table? {
-        let sessions = Table("sessions")
-        if let db = self.createDataBase() {
-            do {
-                try db.run(sessions.create(ifNotExists: true) { t in
-                    let name = Expression<String?>("name")
-                    let identifier = Expression<String>("identifier")
-                    let href = Expression<String?>("hrefLink")
-                    let parentId = Expression<String?>("parentIdentifier")
-                    let favorited = Expression<Bool>("favorited")
-                    
-                    t.column(identifier, primaryKey: true)
-                    t.column(name)
-                    t.column(href)
-                    t.column(parentId)
-                    t.column(favorited)
-                })
-                return sessions
-            } catch {
-                print("\(#fileID) \(#line) error: \(error)")
-                return nil
+    func didInsert(with rowID: Int64, for column: String?) {
+        storeId = rowID
+    }
+    
+    func createDataBase() -> DatabaseQueue? {
+        do {
+            let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+            if let datapath = NSURL.init(string: path)?.appendingPathComponent("session.sqlite3") {
+                let dbQueue = try DatabaseQueue(path: datapath.absoluteString)
+                return dbQueue
             }
+        } catch {
+            print("\(#fileID)-\(#line), error:\(error)")
         }
         return nil
     }
     
     func insertRecord() {
-        DispatchQueue.global().async {
-            let sessions = self.createTable()
-            let name = Expression<String?>("name")
-            let identifier = Expression<String>("identifier")
-            let href = Expression<String?>("hrefLink")
-            let parentId = Expression<String?>("parentIdentifier")
-            let favorited = Expression<Bool>("favorited")
-            do {
-                if let db = self.createDataBase(), let sessions = sessions {
-                    try db.run(sessions.insert(or: .replace,
-                                                  name <- self.name,
-                                                  identifier <- self.identifier!,
-                                                  href <- self.hrefLink,
-                                                  parentId <- self.parentIdentifier,
-                                                  favorited <- self.favorited
-                    ))
-                }
-            } catch {
-                print("\(#fileID) \(#line) error: \(error)")
+        do {
+            if let dbQueue = self.createDataBase() {
+                try dbQueue.write({ (db) in
+                    try db.create(table: "session", ifNotExists: true, body: { (t) in
+                        t.autoIncrementedPrimaryKey("storeId")
+                        t.column("name", .text).notNull()
+                        t.column("identifier", .text).notNull()
+                        t.column("href", .text).notNull()
+                        t.column("favorited", .boolean).notNull()
+                        t.column("parentIdentifier", .text).notNull()
+                        t.column("index", .integer).notNull()
+                    })
+                    try self.insert(db)
+                })
             }
+        } catch {
+            print("\(#fileID)-\(#line), error:\(error)")
         }
     }
     
-    func deleteRecord() {
-        
-    }
-    
     func updateRecord() {
-        DispatchQueue.global().async {
-            do {
-                if let sessions = self.createTable(), let db = self.createDataBase() {
-                    let name = Expression<String?>("name")
-                    let identifier = Expression<String>("identifier")
-                    let href = Expression<String?>("hrefLink")
-                    let parentId = Expression<String?>("parentIdentifier")
-                    let favorited = Expression<Bool>("favorited")
-                    
-                    let thisRecord = sessions.filter(identifier == self.identifier!)
-                    try db.run(thisRecord.update(name <- self.name, href <- self.hrefLink, parentId <- self.parentIdentifier, favorited <- self.favorited))
-                }
-            } catch {
-                print("\(#fileID) \(#line) error: \(error)")
+        do {
+            if let dbQueue = self.createDataBase() {
+                try dbQueue.write({ (db) in
+                    try self.update(db)
+                })
             }
+        } catch {
+            print("\(#fileID)-\(#line), error:\(error)")
         }
     }
 }
