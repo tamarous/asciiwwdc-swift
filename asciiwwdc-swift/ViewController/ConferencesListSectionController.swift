@@ -20,7 +20,10 @@ class ConferencesListSectionController: ListSectionController {
     }
     
     override func sizeForItem(at index:Int) -> CGSize {
-        return CGSize.init(width: collectionContext?.containerSize.width ?? 0.0, height: 120)
+        if let width = collectionContext?.containerSize.width {
+            return CGSize.init(width: width, height: 120)
+        }
+        return .zero
     }
     
     override func cellForItem(at index:Int) -> UICollectionViewCell {

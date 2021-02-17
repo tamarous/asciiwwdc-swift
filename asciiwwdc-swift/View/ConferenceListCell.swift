@@ -25,23 +25,27 @@ class ConferenceListCell: UICollectionViewCell {
     var nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 15)
+        label.textColor = .black
         return label
     }()
     
     var descLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = .black
         return label
     }()
     var locationLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = .black
         return label
     }()
     var identifier: String?
     var timeLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = .black
         return label
     }()
     
@@ -76,7 +80,7 @@ class ConferenceListCell: UICollectionViewCell {
         stackView.distribution = .fillEqually
         
         containerView.addSubview(stackView)
-        containerView.layer.cornerRadius = 4.0
+        containerView.layer.cornerRadius = 12.0
         containerView.backgroundColor = .white
 
         contentView.snp.makeConstraints { (make) in
@@ -85,9 +89,9 @@ class ConferenceListCell: UICollectionViewCell {
         
         containerView.snp.makeConstraints { (make) in
             make.top.equalTo(self.contentView).offset(8)
-            make.left.equalTo(self.contentView).offset(16)
+            make.left.equalTo(self.contentView).offset(32)
             make.bottom.equalTo(self.contentView).offset(-8)
-            make.right.equalTo(self.contentView).offset(-16)
+            make.right.equalTo(self.contentView).offset(-32)
         }
         
         stackView.snp.makeConstraints { (make) in

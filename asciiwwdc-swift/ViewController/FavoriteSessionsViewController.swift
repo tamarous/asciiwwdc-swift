@@ -14,7 +14,7 @@ class FavoriteSessionsViewController: UIViewController {
     
     lazy var collectionView:UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = UIColor.init(red: 234.0/255.0, green: 234.0/255.0, blue: 234.0/255.0, alpha: 1.0)
         return collectionView
     }()
     
@@ -26,7 +26,9 @@ class FavoriteSessionsViewController: UIViewController {
         super.viewDidLoad()
         
         view.addSubview(collectionView)
+        view.backgroundColor = .clear
         navigationItem.title = "Favorites"
+        
         adapter.collectionView = collectionView
         adapter.delegate = self
         adapter.dataSource = self

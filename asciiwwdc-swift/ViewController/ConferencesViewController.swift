@@ -15,7 +15,7 @@ class ConferencesViewController: UIViewController {
     
     let collectionView: UICollectionView = {
         let view = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
-        view.backgroundColor = .clear
+        view.backgroundColor = UIColor.init(red: 234.0/255.0, green: 234.0/255.0, blue: 234.0/255.0, alpha: 1.0)
         return view
     }()
     
@@ -28,8 +28,9 @@ class ConferencesViewController: UIViewController {
         
         navigationItem.title = "Conferences"
         
-        view.backgroundColor = UIColor.init(red: 234.0/255.0, green: 234.0/255.0, blue: 234.0/255.0, alpha: 1.0)
+        view.backgroundColor = .clear
         view.addSubview(collectionView)
+        
         
         adapter.collectionView = collectionView
         adapter.dataSource = self

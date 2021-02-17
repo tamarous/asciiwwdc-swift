@@ -25,9 +25,12 @@ class SessionWebViewController: UIViewController {
         view.addSubview(webView)
         view.backgroundColor = .white
         
+        self.hidesBottomBarWhenPushed = true
+        
         webView.navigationDelegate = self
         webView.snp.makeConstraints { (make) in
-            make.left.right.top.bottom.equalTo(self.view)
+            make.left.right.bottom.equalTo(self.view)
+            make.top.equalTo(self.view).offset(self.view.safeAreaInsets.top)
         }
         
         settings = UIBarButtonItem.init(image: UIImage.init(systemName: "gear"), style: .plain, target: self, action: #selector(settingsTapped))
@@ -47,6 +50,13 @@ class SessionWebViewController: UIViewController {
                 webView.isHidden = true
                 webView.load(urlRequest)
             }
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        webView.snp.updateConstraints { (make) in
+            make.top.equalTo(self.view).offset(self.view.safeAreaInsets.top)
         }
     }
     
