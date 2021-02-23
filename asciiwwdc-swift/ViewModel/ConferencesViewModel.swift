@@ -14,7 +14,7 @@ class ConferencesViewModel:NSObject {
     
     func loadRequest(completion:(() -> Void)?) -> Void {
         loading = true
-        NetworkManager.sharedInstance.getAllConference { [weak self] (conferences) in
+        DataManager.sharedInstance.getAllConference { [weak self] (conferences) in
             self?.cellViewModels = conferences.map { (conference) in
                 let viewModel = ConferenceListCellViewModel()
                 viewModel.conference = conference
