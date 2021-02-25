@@ -16,9 +16,17 @@ class DataBaseManager {
             if let dbQueue = Conference.createDataBase() {
                 try dbQueue.read({ db in
                     let conferences = try Conference.fetchAll(db)
+                    if conferences.count == 0 {
+                        if let completion = completion {
+                            completion(conferences)
+                        }
+                        return
+                    }
                     for conference in conferences {
                         if let identifier = conference.identifier {
-                            conference.tracks = getAllTracks(parentIdentifier: identifier)
+                            if let tracks = getAllTracks(parentIdentifier: identifier) {
+                                conference.tracks = tracks
+                            }
                         }
                     }
                     if let completion = completion {
@@ -28,17 +36,25 @@ class DataBaseManager {
             }
         } catch {
             print("\(#fileID)-\(#line), error:\(error)")
+            if let completion = completion {
+                completion([])
+                return
+            }
         }
     }
     
     func getAllTracks(parentIdentifier:String) -> [Track]? {
+        var tracks:[Track] = []
         do {
             if let dbQueue = Track.createDataBase() {
                 try dbQueue.read({ (db) -> [Track] in
-                    let tracks = try Track.filter(Column("parentIdentifier") == parentIdentifier).fetchAll(db)
+                    tracks = try Track.filter(Column("parentIdentifier") == parentIdentifier).fetchAll(db)
                     for track in tracks {
                         if let identifier = track.identifier {
-                            track.sessions = getAllSessions(parentIdentifier: identifier)
+                            let sessionIdentifier = "\(track.parentIdentifier!)-\(identifier)"
+                            if let sessions = getAllSessions(parentIdentifier: sessionIdentifier) {
+                                track.sessions = sessions
+                            }
                         }
                     }
                     return tracks
@@ -47,20 +63,21 @@ class DataBaseManager {
         } catch {
             print("\(#fileID)-\(#line), error:\(error)")
         }
-        return []
+        return tracks
     }
     
     func getAllSessions(parentIdentifier:String) -> [Session]? {
+        var sessions:[Session] = []
         do {
             if let dbQueue = Session.createDataBase() {
                 try dbQueue.read({ (db) -> [Session] in
-                    let sessions = try Session.filter(Column("parentIdentifier") == parentIdentifier).fetchAll(db)
+                    sessions = try Session.filter(Column("parentIdentifier") == parentIdentifier).fetchAll(db)
                     return sessions
                 })
             }
         } catch {
             print("\(#fileID)-\(#line), error:\(error)")
         }
-        return []
+        return sessions
     }
 }

@@ -72,8 +72,7 @@ class Conference:NSObject,HtmlModelArrayProtocol,BaseHtmlModelProtocol {
         let trackNodes = rootNode.xPath("./div/section[@class='track']")
         var tracksArray:[Track] = []
         for trackNode in trackNodes {
-            let track = Track(rootNode:trackNode)
-            track.parentIdentifier = self.identifier
+            let track = Track(rootNode:trackNode, parentIdentifier: self.identifier)
             track.insertRecord()
             tracksArray.append(track)
         }

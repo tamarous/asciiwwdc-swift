@@ -18,7 +18,7 @@ protocol HtmlModelProtocol {
 }
 
 protocol BaseHtmlModelProtocol {
-    init(rootNode:JiNode)
+   
 }
 
 protocol BasePersistencyProtocol:PersistableRecord, FetchableRecord {

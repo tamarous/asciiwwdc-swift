@@ -25,6 +25,12 @@ class ConferencesViewController: UIViewController {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize:0)
     }()
     
+    var loadingView:UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.isHidden = true
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,8 +46,18 @@ class ConferencesViewController: UIViewController {
             make.top.left.bottom.right.equalTo(self.view)
         }
         
+        view.addSubview(self.loadingView)
+        self.loadingView.snp.makeConstraints { (make) in
+            make.center.equalTo(self.view)
+            make.height.width.equalTo(44)
+        }
+        self.loadingView.isHidden = false
+        self.loadingView.startAnimating()
         viewModel.loadRequest { [weak self] in
-            self?.adapter.performUpdates(animated: true, completion: nil)
+            self?.loadingView.stopAnimating()
+            self?.loadingView.isHidden = true
+            self?.loadingView.removeFromSuperview()
+            self?.collectionView.reloadData()
         }
     }
     

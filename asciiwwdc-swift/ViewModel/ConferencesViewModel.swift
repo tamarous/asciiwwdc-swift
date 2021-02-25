@@ -7,6 +7,7 @@
 
 import Foundation
 import IGListKit
+import UIKit
 
 class ConferencesViewModel:NSObject {
     var cellViewModels:[ConferenceListCellViewModel] = []
@@ -22,7 +23,9 @@ class ConferencesViewModel:NSObject {
             }
             self?.loading = false
             if let completion = completion {
-                completion()
+                DispatchQueue.main.async {
+                    completion()
+                }
             }
         }
     }

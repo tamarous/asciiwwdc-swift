@@ -10,7 +10,15 @@ import Foundation
 class DataManager {
     static let sharedInstance = DataManager()
     
-    func getAllConference(completion: (([Conference]) -> Void)?) {
-        DataBaseManager.sharedInstance.getAllConference(completion: completion)
+    func getAllConference(completion: ((_ conferences:[Conference]) -> Void)?) {
+        DataBaseManager.sharedInstance.getAllConference { (conferences:[Conference]) in
+            if (conferences.count > 0) {
+                if let completion = completion {
+                    completion(conferences)
+                }
+            } else {
+                NetworkManager.sharedInstance.getAllConference(completion: completion)
+            }
+        }
     }
 }

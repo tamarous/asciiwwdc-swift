@@ -17,7 +17,8 @@ class Track: NSObject, BaseHtmlModelProtocol {
     var parentIdentifier:String?
     var storeId:Int64?
     
-    required init(rootNode: JiNode) {
+    required init(rootNode: JiNode, parentIdentifier: String?) {
+        self.parentIdentifier = parentIdentifier
         self.identifier = rootNode["id"]
         self.name = rootNode.xPath("./h1").first?.content
         
@@ -33,13 +34,15 @@ class Track: NSObject, BaseHtmlModelProtocol {
             let dtNode = dtNodes[i]
             let ddNode = ddNodes[i]
             let session = Session(dtNode: dtNode, ddNode: ddNode)
-            session.parentIdentifier = self.identifier
+            if let parentIdentifier = self.parentIdentifier {
+                session.parentIdentifier = "\(parentIdentifier)-\(self.identifier!)"
+            }
             session.insertRecord()
             sessions.append(session)
         }
         self.sessions = sessions
     }
-    
+
     required init(row: Row) {
         self.identifier = row["identifier"]
         self.name = row["name"]
